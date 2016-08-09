@@ -1,59 +1,46 @@
-# pnormmix <- function(q, mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1, pmix1 = 0.5,
-#                      lower.tail = TRUE) {
-#   # Distribution function (pdf) of a mixture of two normal distributions.
-#   #
-#   # Args:
-#   #   q: vector of quantiles
-#   sum(pnorm(q, c(mean1, mean2), c(sd1, sd2), lower.tail = lower.tail) *
-#         c(pmix1, 1 - pmix1))
-# }
 
 pnormmix <- function(q, mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1, pmix1 = 0.5,
                      lower.tail = TRUE) {
   # Distribution function (pdf) of a mixture of two normal distributions.
   #
   # Args:
-  #   q: vector of quantiles.
-  #   mean1: mean of first normal distribution.
-  #   sd1: standard deviation of first normal distribution.
-  #   mean2: mean of second normal distribution.
-  #   sd2: standard deviation of second normal distribution.
-  #   pmix1: mixing proportion for the first distribution. Should be a
-  #          number in the range (0, 1).
-  #   lower.tail: logical; if TRUE(default), probabilities are P[X <= x];
-  #               otherwise, P[X > x].
+  # q: vector of quantiles.
+  # mean1: mean of first normal distribution.
+  # sd1: standard deviation of first normal distribution.
+  # mean2: mean of second normal distribution.
+  # sd2: standard deviation of second normal distribution.
+  # pmix1: mixing proportion for the first distribution. Should be a
+  # number in the range (0, 1).
+  # lower.tail: logical; if TRUE(default), probabilities are P[X <= x];
+  # otherwise, P[X > x].
   #
-  #   Returns:
-  #     Cumulative probability of q or 1 minus it on the mixture normal
-  #     distribution.
+  # Returns:
+  # Cumulative probability of q or 1 minus it on the mixture normal
+  # distribution.
   # Error handling
   stopifnot(pmix1 > 0, pmix1 < 1)
   as.vector(c(pmix1, 1 - pmix1) %*%
               sapply(q, pnorm, mean = c(mean1, mean2), sd = c(sd1, sd2),
                      lower.tail = lower.tail))
 }
-
-# test
-# pnormmix(1, 0, 3.1, 1.7, 3.1, lower.tail = FALSE)
-
 qnormmix <- function(p, mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1, pmix1 = 0.5,
                      lower.tail = TRUE) {
   # Quantile function of a mixture of two normal distributions.
   #
   # Args:
-  #   p: vector of probabilities.
-  #   mean1: mean of first normal distribution.
-  #   sd1: standard deviation of first normal distribution.
-  #   mean2: mean of second normal distribution.
-  #   sd2: standard deviation of second normal distribution.
-  #   pmix1: mixing proportion for the first distribution. Should be a
-  #          number in the range (0, 1).
-  #   lower.tail: logical; if TRUE(default), probabilities are P[X <= x];
-  #               otherwise, P[X > x].
+  # p: vector of probabilities.
+  # mean1: mean of first normal distribution.
+  # sd1: standard deviation of first normal distribution.
+  # mean2: mean of second normal distribution.
+  # sd2: standard deviation of second normal distribution.
+  # pmix1: mixing proportion for the first distribution. Should be a
+  # number in the range (0, 1).
+  # lower.tail: logical; if TRUE(default), probabilities are P[X <= x];
+  # otherwise, P[X > x].
   #
-  #   Returns:
-  #     Quantile corresponding to p or 1 - p on the mixture normal
-  #     distribution.
+  # Returns:
+  # Quantile corresponding to p or 1 - p on the mixture normal
+  # distribution.
   # Error handling
   stopifnot(pmix1 > 0, pmix1 < 1, p >= 0, p <= 1)
   f <- function(x) (pnormmix(x, mean1, sd1, mean2, sd2, pmix1,
@@ -63,7 +50,6 @@ qnormmix <- function(p, mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1, pmix1 = 0.5,
                               lower.tail = lower.tail))
   nlminb(start, f)$par
 }
-
 .bvnorm_kernel <- function(x, y, mu_x = 0, mu_y = 0, sd_x = 1, sd_y = 1,
                            cov_xy = 0) {
   # Helper funcction for computing the kernel for bivariate normal density
@@ -72,7 +58,6 @@ qnormmix <- function(p, mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1, pmix1 = 0.5,
     2 * cor * (x - mu_x) * (y - mu_y) / sd_x / sd_y
   numer / (1 - cor^2)
 }
-
 contour_bvnorm <- function(mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1,
                            cor12 = 0, cov12 = NULL,
                            density = .95, length_out = 101,
@@ -81,22 +66,22 @@ contour_bvnorm <- function(mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1,
   # Plot contour for a bivariate normal distribution
   #
   # Args:
-  #   mean1: mean of first normal distribution (on x-axis).
-  #   sd1: standard deviation of first normal distribution.
-  #   mean2: mean of second normal distribution (on y-axis).
-  #   sd2: standard deviation of second normal distribution.
-  #   cor12: correlation in the bivariate normal.
-  #   cov12: covariance in the bivariate normal. If not input, compute the
-  #          covariance using the correlation and the standard deviations.
-  #   density: density level, i.e., probability enclosed by the ellipse.
-  #   length_out: number of values on the x-axis and on the y-axis to be
-  #               evaluated; default to 101.
-  #   bty: argument passed to the `contour` function.
-  #   ...: other arguments passed to the `countour` funcction.
+  # mean1: mean of first normal distribution (on x-axis).
+  # sd1: standard deviation of first normal distribution.
+  # mean2: mean of second normal distribution (on y-axis).
+  # sd2: standard deviation of second normal distribution.
+  # cor12: correlation in the bivariate normal.
+  # cov12: covariance in the bivariate normal. If not input, compute the
+  # covariance using the correlation and the standard deviations.
+  # density: density level, i.e., probability enclosed by the ellipse.
+  # length_out: number of values on the x-axis and on the y-axis to be
+  # evaluated; default to 101.
+  # bty: argument passed to the `contour` function.
+  # ...: other arguments passed to the `countour` funcction.
   #
-  #   Returns:
-  #     a plot showing the contour of the bivariate normal distribution on
-  #     a two-dimensional space.
+  # Returns:
+  # a plot showing the contour of the bivariate normal distribution on
+  # a two-dimensional space.
   # Error handling
   stopifnot(cor12 >= -1, cor12 <= 1)
   if (is.null(cov12)) cov12 <- cor12 * sd1 * sd2s
@@ -107,7 +92,6 @@ contour_bvnorm <- function(mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1,
   contour(x_seq, y_seq, z, levels = qchisq(density, 2), drawlabels = FALSE,
           bty = bty, ...)
 }
-
 .partit_bvnorm <- function(cut1, cut2, mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1,
                            cor12 = 0, cov12 = cor12 * sd1 * sd2) {
   # Helper funcction for computing summary statistics from a selection approach
@@ -122,7 +106,6 @@ contour_bvnorm <- function(mean1 = 0, sd1 = 1, mean2 = 0, sd2 = 1,
   specificity <- C / (C + B)
   c(A, B, C, D, propsel, success_ratio, sensitivity, specificity)
 }
-
 PartInv <- function(propsel, kappa_r, kappa_f = kappa_r,
                     phi_r, phi_f = phi_r, lambda_r, lambda_f = lambda_r,
                     Theta_r, Theta_f = Theta_r, tau_r, tau_f = tau_r,
@@ -131,46 +114,46 @@ PartInv <- function(propsel, kappa_r, kappa_f = kappa_r,
   # approach
   #
   # Args:
-  #   propsel: proportion of selection.
-  #   kappa_r: latent factor mean for the reference group.
-  #   kappa_f: (optional) latent factor mean for the focal group;
-  #            if no input, set equal to kappa_r.
-  #   phi_r: latent factor variance for the reference group.
-  #   phi_f: (optional) latent factor variance for the focal group;
-  #          if no input, set equal to phi_r.
-  #   lambda_r: a vector of factor loadings for the reference group.
-  #   lambda_f: (optional) a vector of factor loadings for the focal group;
-  #             if no input, set equal to lambda_r.
-  #   tau_r: a vector of measurement intercepts for the reference group.
-  #   tau_f: (optional) a vector of measurement intercepts for the focal group;
-  #          if no input, set equal to tau_r.
-  #   Theta_r: a matrix of the unique factor variances and covariances
-  #            for the reference group.
-  #   Theta_f: (optional) a matrix of the unique factor variances and
-  #            covariances for the focal group;
-  #            if no input, set equal to Theta_r.
-  #   pmix_ref: Proportion of the reference group;
-  #             default to 0.5 (i.e., two populations have equal size).
-  #   plot_contour: logical; whether the contour of the two populations
-  #                 should be plotted; default to TRUE.
-  #   ...: other arguments passed to the `countour` funcction.
+  # propsel: proportion of selection.
+  # kappa_r: latent factor mean for the reference group.
+  # kappa_f: (optional) latent factor mean for the focal group;
+  # if no input, set equal to kappa_r.
+  # phi_r: latent factor variance for the reference group.
+  # phi_f: (optional) latent factor variance for the focal group;
+  # if no input, set equal to phi_r.
+  # lambda_r: a vector of factor loadings for the reference group.
+  # lambda_f: (optional) a vector of factor loadings for the focal group;
+  # if no input, set equal to lambda_r.
+  # tau_r: a vector of measurement intercepts for the reference group.
+  # tau_f: (optional) a vector of measurement intercepts for the focal group;
+  # if no input, set equal to tau_r.
+  # Theta_r: a matrix of the unique factor variances and covariances
+  # for the reference group.
+  # Theta_f: (optional) a matrix of the unique factor variances and
+  # covariances for the focal group;
+  # if no input, set equal to Theta_r.
+  # pmix_ref: Proportion of the reference group;
+  # default to 0.5 (i.e., two populations have equal size).
+  # plot_contour: logical; whether the contour of the two populations
+  # should be plotted; default to TRUE.
+  # ...: other arguments passed to the `countour` funcction.
   #
-  #   Returns:
-  #     a list of four elements and a plot if plot_contour == TRUE:
-  #     - propsel: echo the same argument as input.
-  #     - cutpt_xi: cut point on the latent scale (xi).
-  #     - cutpt_z: cut point on the observed scale (Z).
-  #     - summary: A 8 x 2 table, with columns representing the reference
-  #                and the focal groups, and the rows represent
-  #                probabilities of true positive (A), false positive (B),
-  #                true negative (C), false negative (D); proportion selected,
-  #                success ratio, sensitivity, and specificity.
+  # Returns:
+  # a list of four elements and a plot if plot_contour == TRUE:
+  # - propsel: echo the same argument as input.
+  # - cutpt_xi: cut point on the latent scale (xi).
+  # - cutpt_z: cut point on the observed scale (Z).
+  # - summary: A 8 x 2 table, with columns representing the reference
+  # and the focal groups, and the rows represent
+  # probabilities of true positive (A), false positive (B),
+  # true negative (C), false negative (D); proportion selected,
+  # success ratio, sensitivity, and specificity.
   # Error handling
   stopifnot(length(kappa_r) == 1, length(kappa_f) == 1, length(phi_r) == 1,
             length(phi_f) == 1)
   if (length(Theta_r) == length(lambda_r)) Theta_r <- diag(Theta_r)
   if (length(Theta_f) == length(lambda_f)) Theta_f <- diag(Theta_f)
-  library(mnormt)  # load `mnormt` package
+  library(mnormt) # load `mnormt` package
   mean_zr <- sum(tau_r) + sum(lambda_r) * kappa_r
   mean_zf <- sum(tau_f) + sum(lambda_f) * kappa_f
   sd_zr <- sqrt(sum(lambda_r)^2 * phi_r + sum(Theta_r))
@@ -192,7 +175,6 @@ PartInv <- function(propsel, kappa_r, kappa_f = kappa_r,
                                   "C (true negative)", "D (false negative)",
                                   "Proportion selected", "Success ratio",
                                   "Sensitivity", "Specificity"))
-  p <- NULL
   if (plot_contour) {
     x_lim <- range(c(kappa_r + c(-3, 3) * sd_xir,
                      kappa_f + c(-3, 3) * sd_xif))
@@ -212,10 +194,9 @@ PartInv <- function(propsel, kappa_r, kappa_f = kappa_r,
     x_cord <- rep(cut_xi + c(.25, -.25) * sd_xir, 2)
     y_cord <- rep(cut_z + c(.25, -.25) * sd_zr, each = 2)
     text(x_cord, y_cord, c("A", "B", "D", "C"))
-    p <- recordPlot()
   }
   list(propsel = propsel, cutpt_xi = cut_xi, cutpt_z = cut_z,
-       summary = round(dat, 3), p = p)
+       summary = round(dat, 3))
 }
 
 ##########
