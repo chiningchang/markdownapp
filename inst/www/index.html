@@ -63,29 +63,30 @@ iframe {
 </head>
 <body>
 
-<div id="editor">Partial Invariance and Selection
+<div id="editor">
+Partial Invariance and Selection
 =======================
 
 Developed by Kwok & Lai (2016)
 
-```{r input}
-#### Type your results on the left panel
-propsel = .10
-kappa_r = 0
-kappa_f = -0.125
-phi_r = 0.354^2
-phi_f = 0.329^2
-lambda_r = c(1.00, 1.66, 2.30, 2.29)
-tau_r = c(1.54, 1.36, 1.16, 1.08)
-tau_f = c(0.68, 1.36, 1.16, 1.08)
-Theta_r = diag(c(1.20, 0.81, 0.32, 0.32))
-Theta_f = diag(c(0.72, 0.81, 0.32, 0.32))
-pmix_ref = 5 / 7
+```{r input. Type your results here ↓↓↓↓↓↓↓↓↓↓}
+PartInv(
+    propsel=.10, 
+    kappa_r = 0,
+    kappa_f = -0.125, # optional
+    phi_r = 0.354^2, 
+    phi_f = 0.329^2, # optional
+    lambda_r = c(1.00, 1.66, 2.30, 2.29), 
+    lambda_f= c(1.00, 1.66, 2.30, 2.29), # optional 
+    tau_r = c(1.54, 1.36, 1.16, 1.08),  
+    tau_f = c(0.68, 1.36, 1.16, 1.08), # optional 
+    Theta_r = diag(c(1.20, 0.81, 0.32, 0.32)),  
+    Theta_f = diag(c(0.72, 0.81, 0.32, 0.32)), # optional 
+    pmix_ref = 5 / 7 # optional (default to 0.5)
+    )
 ```
-
-```{r output,echo=FALSE}
-output(propsel, kappa_r, kappa_f, phi_r, phi_f,
-        lambda_r,tau_r,tau_f,Theta_r,Theta_f,pmix_ref)
+```{r Note, echo=FALSE}
+#Note: For the optional parameter, delete it if no input.
 ```
 </div>
 
