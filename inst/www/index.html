@@ -66,7 +66,7 @@ iframe {
 <div id="editor">Partial Invariance and Selection
 =======================
 
-```{r input, fig.width=8, fig.height=5}
+```{r input}
 #### Type your results on the left panel
 propsel = .10
 kappa_r = 0
@@ -81,7 +81,7 @@ Theta_f = diag(c(0.72, 0.81, 0.32, 0.32))
 pmix_ref = 5 / 7
 ```
 
-```{r output, fig.width=8, fig.height=5, echo=FALSE}
+```{r output,echo=FALSE}
 output(propsel, kappa_r, kappa_f, phi_r, phi_f,
         lambda_r,tau_r,tau_f,Theta_r,Theta_f,pmix_ref)
 ```
